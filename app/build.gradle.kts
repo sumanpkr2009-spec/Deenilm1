@@ -59,5 +59,5 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.batoulapps.adhan:adhan2-jvm:0.0.7")
+    // adhan2 removed (Kotlin 2.x metadata incompatible with Kotlin 1.9); prayer math is now native in PrayerHelper
 }
