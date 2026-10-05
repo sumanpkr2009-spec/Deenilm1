@@ -3,6 +3,32 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+// Decode binary assets (keystore + icons) at the TOP LEVEL, outside android {},
+// where Project.file() and buildDir resolve unambiguously.
+val decodedKeystore: java.io.File = java.io.File(project.buildDir, "generated/debug.keystore").apply {
+    parentFile.mkdirs()
+    if (!exists()) {
+        val b64 = project.file("debug.keystore.b64").readText().trim()
+        writeBytes(java.util.Base64.getDecoder().decode(b64))
+    }
+}
+mapOf(
+    "mdpi" to "mdpi.txt",
+    "hdpi" to "hdpi.txt",
+    "xhdpi" to "xhdpi.txt",
+    "xxhdpi" to "xxhdpi.txt",
+    "xxxhdpi" to "xxxhdpi.txt"
+).forEach { (density, b64file) ->
+    val pngBytes = java.util.Base64.getDecoder().decode(
+        project.file("src/main/res/icon-b64/$b64file").readText().trim()
+    )
+    val outDir = project.file("src/main/res/mipmap-$density").apply { mkdirs() }
+    listOf("ic_launcher.png", "ic_launcher_round.png").forEach { name ->
+        val out = java.io.File(outDir, name)
+        if (!out.exists()) out.writeBytes(pngBytes)
+    }
+}
+
 android {
     namespace = "com.deenilm.app"
     compileSdk = 34
@@ -15,11 +41,6 @@ android {
         versionName = "1.0"
     }
 
-    // TEMP TEST: direct keystore reference
-    val decodedKeystore = file("debug.keystore.b64")
-
-    // TEMP TEST: icon decode disabled
-
     signingConfigs {
         getByName("debug") {
             storeFile = decodedKeystore
@@ -31,11 +52,11 @@ android {
 
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("debug") // temp
+            signingConfig = signingConfigs.getByName("debug")
         }
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug") // temp
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
