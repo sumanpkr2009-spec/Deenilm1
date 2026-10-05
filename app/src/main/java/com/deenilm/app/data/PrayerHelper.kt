@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
-import com.batoulapps.adhan.CalculationMethod
-import com.batoulapps.adhan.Coordinates
-import com.batoulapps.adhan.data.DateComponents
-import com.batoulapps.adhan.Madhab
-import com.batoulapps.adhan.PrayerTimes
-import com.batoulapps.adhan.Qibla
+import com.batoulapps.adhan2.CalculationMethod
+import com.batoulapps.adhan2.Coordinates
+import com.batoulapps.adhan2.data.DateComponents
+import com.batoulapps.adhan2.Madhab
+import com.batoulapps.adhan2.PrayerTimes
+import com.batoulapps.adhan2.Qibla
 import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -28,19 +28,19 @@ object PrayerHelper {
         date: LocalDate = LocalDate.now()
     ): List<NamedPrayer>? = try {
         val params = CalculationMethod.valueOf(method).parameters
-        params.madhab = Madhab.valueOf(madhab)
+            .copy(madhab = Madhab.valueOf(madhab))
         val t = PrayerTimes(
             Coordinates(lat, lng),
             DateComponents(date.year, date.monthValue, date.dayOfMonth),
             params
         )
         listOf(
-            NamedPrayer("Fajr", t.fajr.time),
-            NamedPrayer("Sunrise", t.sunrise.time),
-            NamedPrayer("Dhuhr", t.dhuhr.time),
-            NamedPrayer("Asr", t.asr.time),
-            NamedPrayer("Maghrib", t.maghrib.time),
-            NamedPrayer("Isha", t.isha.time)
+            NamedPrayer("Fajr", t.fajr.toEpochMilliseconds()),
+            NamedPrayer("Sunrise", t.sunrise.toEpochMilliseconds()),
+            NamedPrayer("Dhuhr", t.dhuhr.toEpochMilliseconds()),
+            NamedPrayer("Asr", t.asr.toEpochMilliseconds()),
+            NamedPrayer("Maghrib", t.maghrib.toEpochMilliseconds()),
+            NamedPrayer("Isha", t.isha.toEpochMilliseconds())
         )
     } catch (e: Exception) {
         null
