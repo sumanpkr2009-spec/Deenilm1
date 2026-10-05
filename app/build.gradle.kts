@@ -98,5 +98,5 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.batoulapps.adhan:adhan2-jvm:0.0.7")
+    // TEMP DISABLED for CI diagnosis: implementation("com.batoulapps.adhan:adhan2-jvm:0.0.7")
 }
