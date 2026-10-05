@@ -15,37 +15,10 @@ android {
         versionName = "1.0"
     }
 
-    // Debug keystore is stored base64-encoded (debug.keystore.b64) because the GitHub
-    // API push used here cannot transfer binary files. Decode it at configuration time
-    // so every CI build signs with the SAME key (reinstalls keep working).
-    val decodedKeystore = File(buildDir, "generated/debug.keystore").apply {
-        parentFile.mkdirs()
-        if (!exists()) {
-            val b64 = file("debug.keystore.b64").readText().trim()
-            writeBytes(java.util.Base64.getDecoder().decode(b64))
-        }
-    }
+    // TEMP TEST: direct keystore reference
+    val decodedKeystore = file("debug.keystore.b64")
 
-    // Launcher icons are stored base64-encoded (src/main/res/icon-b64/*.txt) because
-    // the GitHub API push used here cannot transfer binary files. Decode them at
-    // configuration time so the manifest's @mipmap/ic_launcher references resolve.
-    val iconDensities = mapOf(
-        "mdpi" to "mdpi.txt",
-        "hdpi" to "hdpi.txt",
-        "xhdpi" to "xhdpi.txt",
-        "xxhdpi" to "xxhdpi.txt",
-        "xxxhdpi" to "xxxhdpi.txt"
-    )
-    iconDensities.forEach { (density, b64file) ->
-        val pngBytes = java.util.Base64.getDecoder().decode(
-            file("src/main/res/icon-b64/$b64file").readText().trim()
-        )
-        val outDir = file("src/main/res/mipmap-$density").apply { mkdirs() }
-        listOf("ic_launcher.png", "ic_launcher_round.png").forEach { name ->
-            val out = File(outDir, name)
-            if (!out.exists()) out.writeBytes(pngBytes)
-        }
-    }
+    // TEMP TEST: icon decode disabled
 
     signingConfigs {
         getByName("debug") {
@@ -58,11 +31,11 @@ android {
 
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("debug") // temp
         }
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("debug") // temp
         }
     }
 
@@ -98,5 +71,5 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    // TEMP DISABLED for CI diagnosis: implementation("com.batoulapps.adhan:adhan2-jvm:0.0.7")
+    implementation("com.batoulapps.adhan:adhan2-jvm:0.0.7")
 }
