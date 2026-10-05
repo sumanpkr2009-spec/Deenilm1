@@ -7,22 +7,7 @@ plugins {
 // where Project.file() and buildDir resolve unambiguously.
 // TEMP DISABLED: keystore decode
 val decodedKeystore: java.io.File = project.file("debug.keystore.b64")
-mapOf(
-    "mdpi" to "mdpi.txt",
-    "hdpi" to "hdpi.txt",
-    "xhdpi" to "xhdpi.txt",
-    "xxhdpi" to "xxhdpi.txt",
-    "xxxhdpi" to "xxxhdpi.txt"
-).forEach { (density, b64file) ->
-    val pngBytes = java.util.Base64.getDecoder().decode(
-        project.file("src/main/res/icon-b64/$b64file").readText().trim()
-    )
-    val outDir = project.file("src/main/res/mipmap-$density").apply { mkdirs() }
-    listOf("ic_launcher.png", "ic_launcher_round.png").forEach { name ->
-        val out = java.io.File(outDir, name)
-        if (!out.exists()) out.writeBytes(pngBytes)
-    }
-}
+// TEMP DISABLED: icon decode
 
 android {
     namespace = "com.deenilm.app"
