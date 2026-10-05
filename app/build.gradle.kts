@@ -5,13 +5,8 @@ plugins {
 
 // Decode binary assets (keystore + icons) at the TOP LEVEL, outside android {},
 // where Project.file() and buildDir resolve unambiguously.
-val decodedKeystore: java.io.File = java.io.File(project.buildDir, "generated/debug.keystore").apply {
-    parentFile.mkdirs()
-    if (!exists()) {
-        val b64 = project.file("debug.keystore.b64").readText().trim()
-        writeBytes(java.util.Base64.getDecoder().decode(b64))
-    }
-}
+// TEMP DISABLED: keystore decode
+val decodedKeystore: java.io.File = project.file("debug.keystore.b64")
 mapOf(
     "mdpi" to "mdpi.txt",
     "hdpi" to "hdpi.txt",
