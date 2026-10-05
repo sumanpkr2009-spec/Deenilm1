@@ -10,7 +10,6 @@
 
     <application
         android:label="Deen Ilm"
-        android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.DeenIlm"
         android:usesCleartextTraffic="false">
         <activity
